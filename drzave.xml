@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<drzave>
+<drzava stanovnika="3500000">
+    <naziv>Bosna i Hercegovina</naziv>
+    <glavnigrad stanovnika="400000">
+        <naziv>Sarajevo</naziv>
+    </glavnigrad>
+    <povrsina jedinica="km2">51129</povrsina>
+    <moneta naziv="KM" />
+</drzava>
+
+<drzava stanovnika="46000000">
+    <naziv>Spanija</naziv>
+    <glavnigrad stanovnika="3000000">
+    <naziv>Madrid</naziv>
+    </glavnigrad>
+    <povrsina jedinica="km2">505370</povrsina>
+    <moneta naziv="€" />
+</drzava>
+
+</drzave>

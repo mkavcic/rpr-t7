@@ -1,5 +1,10 @@
 package ba.unsa.etf.rpr.tutorijal07;
 
+import org.w3c.dom.Document;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +12,7 @@ import java.util.Scanner;
 
 public class Tutorijal {
 
-    ArrayList<Grad> ucitajGradove(){
+    public ArrayList<Grad> ucitajGradove(){
         ArrayList<Grad> gradovi= new ArrayList<>();
         Scanner citac;
         try {
@@ -36,6 +41,18 @@ public class Tutorijal {
         finally{ citac.close(); }
 
         return gradovi;
+    }
+
+    public UN ucitajXml(){
+        UN un= new UN();
+        Document xmldoc= null;
+        try{
+            DocumentBuilder docReader= DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xmldoc=docReader.parse(new File("drzave.xml"));
+        } catch (Exception e) {
+            System.out.println("drzave.xml nije validan XML dokument");
+        }
+        return un;
     }
 
     public static void main(String[] args) {
