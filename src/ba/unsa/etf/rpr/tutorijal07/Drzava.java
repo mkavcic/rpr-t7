@@ -8,6 +8,22 @@ public class Drzava {
     private double povrsina;
     private String jedinicaZaPovrsinu;
 
+    public void setPovrsina(double povrsina) {
+        this.povrsina = povrsina;
+    }
+
+    public void setJedinicaZaPovrsinu(String jedinicaZaPovrsinu) {
+        this.jedinicaZaPovrsinu = jedinicaZaPovrsinu;
+    }
+
+    public double getPovrsina() {
+        return povrsina;
+    }
+
+    public String getJedinicaZaPovrsinu() {
+        return jedinicaZaPovrsinu;
+    }
+
     public Drzava() {
     }
 
