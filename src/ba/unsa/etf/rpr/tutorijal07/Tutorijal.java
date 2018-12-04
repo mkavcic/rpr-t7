@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class Tutorijal {
 
-    public ArrayList<Grad> ucitajGradove() {
+    public static ArrayList<Grad> ucitajGradove() {
         ArrayList<Grad> gradovi = new ArrayList<>();
         Scanner citac;
         try {
