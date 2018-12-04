@@ -5,6 +5,8 @@ public class Drzava {
     private int brojStanovnika;
     private double[] temperature = new double[1000];
     private Grad glavniGrad;
+    private double povrsina;
+    private String jedinicaZaPovrsinu;
 
     public Drzava() {
     }
