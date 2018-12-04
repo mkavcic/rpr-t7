@@ -56,6 +56,8 @@ public class Tutorijal {
             System.out.println("drzave.xml nije validan XML dokument");
         }
 
+        ArrayList<Drzava> spisakDrzava = new ArrayList<>();
+
         Element element=xmldoc.getDocumentElement();
         NodeList drzave = element.getChildNodes();
 
@@ -100,30 +102,16 @@ public class Tutorijal {
                                 }
                             }
                             if(imePodatka=="povrsina"){
-                                novaDrzava.
+                                novaDrzava.setJedinicaZaPovrsinu(trenutniPodatak.getAttribute("jedinica"));
+                                novaDrzava.setPovrsina(Double.parseDouble(trenutniPodatak.getTextContent()));
                             }
                         }
-
                     }
+                    spisakDrzava.add(novaDrzava);
                 }
             }
-
-            //int brAtributa = drzava.getAttributes().getLength();
-           // System.out.println(brAtributa);
-            NodeList atributi = drzava.getChildNodes();
-
-
-                String naziv = atributi.item(1).getTextContent();
-                System.out.println(", sadrzaj: '" + naziv + "'");
-                Drzava d= new Drzava();
-                d.setNaziv(naziv);
-           // String grad = atributi.item(3).getTextContent();
-            //System.out.println(", sadrzaj: '" + grad + "'");
+            un.setDrzave(spisakDrzava);
         }
-
-
-
-
         return un;
     }
 
