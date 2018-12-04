@@ -46,7 +46,7 @@ public class Tutorijal {
         return gradovi;
     }
 
-    public UN ucitajXml(ArrayList<Grad> gradovi) {
+    public static UN ucitajXml(ArrayList<Grad> gradovi) {
         UN un = new UN();
         Document xmldoc = null;
         try {
