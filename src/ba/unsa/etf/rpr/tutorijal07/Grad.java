@@ -4,13 +4,13 @@ public class Grad {
     private String naziv;
     private int brojStanovnika;
     private double povrsina;
-    private double[] temperature = new double [1000];
+    private double[] temperature = new double[1000];
 
     public Grad() {
-        this.naziv="";
-        this.brojStanovnika=0;
-        this.povrsina=0;
-        this.temperature=new double[1000];
+        this.naziv = "";
+        this.brojStanovnika = 0;
+        this.povrsina = 0;
+        this.temperature = new double[1000];
     }
 
     public String getNaziv() {
