@@ -1,6 +1,8 @@
 package ba.unsa.etf.rpr.tutorijal07;
 
-public class Grad {
+import java.io.Serializable;
+
+public class Grad implements Serializable {
     private String naziv;
     private int brojStanovnika;
     private double povrsina;
