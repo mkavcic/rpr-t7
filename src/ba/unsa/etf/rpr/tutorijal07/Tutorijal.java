@@ -7,9 +7,9 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -58,66 +58,94 @@ public class Tutorijal {
 
         ArrayList<Drzava> spisakDrzava = new ArrayList<>();
 
-        Element element = xmldoc.getDocumentElement();
-        NodeList drzave = element.getChildNodes();
+        Element element = null;
+        if (xmldoc != null) {
+            element = xmldoc.getDocumentElement();
+        }
+        NodeList drzave = element != null ? element.getChildNodes() : null;
 
-        for (int i = 0; i < drzave.getLength(); i++) {
-            Node drzava = drzave.item(i);
-            Drzava novaDrzava = new Drzava(); //napravljena nova drzava koja ce se dodati u istu
+        if (drzave != null) {
+            for (int i = 0; i < drzave.getLength(); i++) {
+                Node drzava = drzave.item(i);
+                Drzava novaDrzava = new Drzava(); //napravljena nova drzava koja ce se dodati u listu
 
-            if (drzava instanceof Element) {
-                Element e = (Element) drzava;
-                novaDrzava.setBrojStanovnika(Integer.parseInt(e.getAttribute("stanovnika"))); //postavljanje broja stanovnika za novu drzavu
+                if (drzava instanceof Element) {
+                    Element e = (Element) drzava;
+                    novaDrzava.setBrojStanovnika(Integer.parseInt(e.getAttribute("stanovnika"))); //postavljanje broja stanovnika za novu drzavu
 
-                NodeList podaci = e.getChildNodes(); //uzimamo ostale podatke
+                    NodeList podaci = e.getChildNodes(); //uzimamo ostale podatke
 
-                for (int j = 0; j < podaci.getLength(); j++) {
-                    Node podatak = podaci.item(j);
+                    label:
+                    for (int j = 0; j < podaci.getLength(); j++) {
+                        Node podatak = podaci.item(j);
 
-                    if (podatak instanceof Element) {
-                        Element trenutniPodatak = (Element) podatak;
+                        if (podatak instanceof Element) {
+                         //   Element trenutniPodatak = (Element) podatak;
 
-                        String imePodatka = trenutniPodatak.getTextContent();
+                            String imePodatka = podatak.getTextContent();
 
-                        if (imePodatka == "naziv") novaDrzava.setNaziv(imePodatka);
-                        else if (imePodatka == "glavnigrad") {
-                            Grad glavniGrad = new Grad();
-                            glavniGrad.setBrojStanovnika(Integer.parseInt(trenutniPodatak.getAttribute("stanovnika")));
-                            NodeList podaciGrad = trenutniPodatak.getChildNodes();
-                            for (int k = 0; k < podaciGrad.getLength(); k++) {
-                                Node podatakGrad = podaciGrad.item(k);
-                                if (podaciGrad instanceof Element) {
-                                    if (((Element) podaciGrad).getTagName().equals("naziv")) {
-                                        glavniGrad.setNaziv(((Element) podaciGrad).getTextContent());
-                                        boolean mjerenja = false;
-                                        for (var x : gradovi) {
-                                            if (glavniGrad.getNaziv().equals(x.getNaziv())) {
-                                                glavniGrad.setTemperature((x.getTemperature()));
-                                                mjerenja = true;
+                            switch (imePodatka) {
+                                case "naziv":
+                                    novaDrzava.setNaziv("???");
+                                    break label;
+                                case "glavnigrad":
+                                    Grad glavniGrad = new Grad();
+                                    glavniGrad.setBrojStanovnika(Integer.parseInt(((Element)podatak).getAttribute("stanovnika")));
+                                    NodeList podaciGrad = (podatak).getChildNodes();
+                                    for (int k = 0; k < podaciGrad.getLength(); k++) {
+                                        Node podatakGrad = podaciGrad.item(k);
+                                        if (podatakGrad instanceof Element) {
+                                            if (((Element) podaciGrad).getTagName().equals("naziv")) {
+                                                glavniGrad.setNaziv(((Element) podaciGrad).getTextContent());
+                                                boolean mjerenja = false;
+                                                for (var x : gradovi) {
+                                                    if (glavniGrad.getNaziv().equals(x.getNaziv())) {
+                                                        glavniGrad.setTemperature((x.getTemperature()));
+                                                        mjerenja = true;
+                                                    }
+                                                }
+                                                if (!mjerenja) {
+                                                    glavniGrad.setTemperature(null);
+                                                }
+                                                novaDrzava.setGlavniGrad(glavniGrad);
                                             }
                                         }
-                                        // if(!mjerenja){ glavniGrad.setTemperature();}
-                                        novaDrzava.setGlavniGrad(glavniGrad);
                                     }
-                                }
-                            }
-                            if (imePodatka == "povrsina") {
-                                novaDrzava.setJedinicaZaPovrsinu(trenutniPodatak.getAttribute("jedinica"));
-                                novaDrzava.setPovrsina(Double.parseDouble(trenutniPodatak.getTextContent()));
+                                    break;
+                                case "povrsina":
+                                    novaDrzava.setJedinicaZaPovrsinu(((Element)podatak).getAttribute("jedinica"));
+                                    novaDrzava.setPovrsina(Double.parseDouble(((Element)podatak).getTextContent()));
+                                    break;
                             }
                         }
+
                     }
                     spisakDrzava.add(novaDrzava);
+                    }
+
                 }
-            }
-            un.setDrzave(spisakDrzava);
         }
+        un.setDrzave(spisakDrzava);
         return un;
+    }
+
+    public static void ispisiXml(UN un) {
+        try {
+            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("un.xml"));
+            izlaz.writeObject(un);
+            izlaz.close();
+        } catch (Exception e) {
+            System.out.println("Greška: " + e);
+            System.exit(1);
+        }
+
     }
 
     public static void main(String[] args) {
         Tutorijal t = new Tutorijal();
-        t.ucitajGradove();
-        t.ucitajXml(null);
+        UN un= new UN();
+        un= ucitajXml(ucitajGradove());
+        ispisiXml(un);
     }
+
 }
